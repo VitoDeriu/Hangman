@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 )
 
@@ -26,7 +27,9 @@ func ShowTextFromFile(n string) {
 	if err := sc.Err(); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(lines[rand])
+	randomIndex := rand.Intn(len(lines))
+	Word := lines[randomIndex]
+	fmt.Println(Word)
 }
 func ParsingDico() {
 
