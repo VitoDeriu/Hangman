@@ -27,13 +27,9 @@ func ShowTextFromFile(n string) {
 	if err := sc.Err(); err != nil {
 		log.Fatal(err)
 	}
-<<<<<<< HEAD
-	fmt.Println(lines[rand])
-=======
 	randomIndex := rand.Intn(len(lines))
 	Word := lines[randomIndex]
 	fmt.Println(Word)
->>>>>>> e61d98012236d1f8fd8843de5c573c3bfa2c38bb
 }
 func ParsingDico() {
 
