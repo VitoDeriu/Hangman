@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-var List []string
+var List string
 
 func ShowTextFromFile(n string) {
 
@@ -13,7 +13,7 @@ func ShowTextFromFile(n string) {
 	if err != nil {
 		fmt.Println("Erreur")
 	} else {
-		List = append(List, string(content))
+		List = List + string(content)
 	}
 	fmt.Println(List)
 }
@@ -21,10 +21,15 @@ func ShowTextFromFile(n string) {
 func ParsingDico(a string) {
 
 	for _, dicoParse := range a {
-		var mot []string
+
+		var tab []string
+		var mot string
+
+		mot += string(dicoParse)
+
 		if dicoParse == '\n' {
-			mot = append(mot, string(dicoParse))
-			fmt.Println(mot)
+			tab = append(tab, mot)
+			fmt.Println(tab)
 		}
 	}
 	return
