@@ -16,17 +16,20 @@ func ShowTextFromFile(n string) {
 		log.Fatal(err)
 	}
 	defer file.Close()
+	
 	sc := bufio.NewScanner(file)
 	lines := make([]string, 0)
 	for sc.Scan() {
 		lines = append(lines, sc.Text())
 	}
+	
 	if err := sc.Err(); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(lines)
 }
 func ParsingDico(a string) {
+
 	for _, dicoParse := range a {
 		var mot []string
 		if dicoParse == '\n' {
