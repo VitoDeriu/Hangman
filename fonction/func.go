@@ -1,25 +1,30 @@
 package hangman
 
 import (
+	"bufio"
 	"fmt"
+	"log"
 	"os"
 )
 
-var List string
-
 func ShowTextFromFile(n string) {
 
-	content, err := os.ReadFile(n)
+	file, err := os.Open(n)
 	if err != nil {
-		fmt.Println("Erreur")
-	} else {
-		List = List + string(content)
+		log.Fatal(err)
 	}
-	fmt.Println(List)
+	defer file.Close()
+	sc := bufio.NewScanner(file)
+	lines := make([]string, 0)
+	for sc.Scan() {
+		lines = append(lines, sc.Text())
+	}
+	if err := sc.Err(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(lines)
 }
-
 func ParsingDico(a string) {
-
 	for _, dicoParse := range a {
 
 		var tab []string
