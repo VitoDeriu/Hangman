@@ -4,8 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 )
+
+var Word string
 
 func ShowTextFromFile(n string) {
 
@@ -14,33 +17,22 @@ func ShowTextFromFile(n string) {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	
+
 	sc := bufio.NewScanner(file)
 	lines := make([]string, 0)
 	for sc.Scan() {
 		lines = append(lines, sc.Text())
 	}
-	
+
 	if err := sc.Err(); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(lines)
+	randomIndex := rand.Intn(len(lines))
+	Word := lines[randomIndex]
+	fmt.Println(Word)
 }
-func ParsingDico(a string) {
+func ParsingDico() {
 
-	for _, dicoParse := range a {
-
-		var tab []string
-		var mot string
-
-		mot += string(dicoParse)
-
-		if dicoParse == '\n' {
-			tab = append(tab, mot)
-			fmt.Println(tab)
-		}
-	}
-	return
 }
 
 // on stock le for range dans une variable et quand y'a un \n on met tout ca dans un tableau
