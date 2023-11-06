@@ -9,6 +9,7 @@ import (
 )
 
 var Word string
+var Tableau []string
 
 func ShowTextFromFile(n string) {
 
@@ -19,7 +20,8 @@ func ShowTextFromFile(n string) {
 	defer file.Close()
 
 	sc := bufio.NewScanner(file)
-	lines := make([]string, 0)
+	//lines := make([]string, 0)
+	var lines []string
 	for sc.Scan() {
 		lines = append(lines, sc.Text())
 	}
@@ -29,9 +31,28 @@ func ShowTextFromFile(n string) {
 	}
 	randomIndex := rand.Intn(len(lines))
 	Word := lines[randomIndex]
+	for _, i := range Word {
+		if i == '-' {
+			Tableau = append(Tableau, ("-"))
+		} else {
+			Tableau = append(Tableau, ("_"))
+		}
+	}
 	fmt.Println(Word)
+	fmt.Println(Tableau)
+	Inputplayer(Tableau)
 }
-func ParsingDico() {
+
+func Inputplayer(n []string) {
+	var input string
+	fmt.Println("\nEntrez une lettre")
+	fmt.Scanln(&input)
+	for i := 0; i < len(Tableau); i++ {
+		if string(i) == input {
+			Tableau = append(Tableau, (input))
+		}
+	}
+	fmt.Println(Tableau)
 
 }
 
