@@ -2,7 +2,6 @@ package hangman
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -10,29 +9,28 @@ import (
 
 var Word string
 
-func ShowTextFromFile(n string) {
-
-	file, err := os.Open(n)
+func ReadLines(path string) ([]string, error) {
+	
+	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer file.Close()
 
-	sc := bufio.NewScanner(file)
-	lines := make([]string, 0)
-	for sc.Scan() {
-		lines = append(lines, sc.Text())
-	}
+	var lines []string
 
-	if err := sc.Err(); err != nil {
-		log.Fatal(err)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
 	}
-	randomIndex := rand.Intn(len(lines))
-	Word := lines[randomIndex]
-	fmt.Println(Word)
-}
-func ParsingDico() {
-
+	return lines, scanner.Err()
 }
 
-// on stock le for range dans une variable et quand y'a un \n on met tout ca dans un tableau
+func WriteWord(path string) string {
+	f, err := ReadLines(path)
+	if err != nil {
+		log.Fatalf("readLines: %s", err)
+	}
+	ale := rand.Intn(len(f))
+	return f[ale]
+}
