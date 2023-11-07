@@ -8,11 +8,11 @@ import (
 	"os"
 )
 
-var Word string      //mot a deviner
-var Tableau []string //tableau d'underscore
-var win bool         //verif si on a win (si y'a plus d'underscore)
-var Guessed []string //liste des lettres déjà rentrer
-var Graph int        //compteur de point pour le graph
+var Word string       //mot a deviner
+var TabUnder []string //tableau d'underscore
+var win bool          //verif si on a win (si y'a plus d'underscore)
+var Guessed []string  //liste des lettres déjà rentrer
+var Graph int         //compteur de point pour le graph
 
 func ShowTextFromFile(path string) {
 
@@ -34,15 +34,16 @@ func ShowTextFromFile(path string) {
 	randomIndex := rand.Intn(len(lines))
 	Word = ToLower(lines[randomIndex])
 	Underscore(Word)
+	RandomLetter()
 }
 
 func Underscore(Word string) {
 
 	for _, i := range Word {
 		if i == '-' {
-			Tableau = append(Tableau, ("-"))
+			TabUnder = append(TabUnder, ("-"))
 		} else {
-			Tableau = append(Tableau, ("_"))
+			TabUnder = append(TabUnder, ("_"))
 		}
 	}
 }
@@ -50,7 +51,7 @@ func Underscore(Word string) {
 func SelectLevel() string {
 	var Input string
 
-	fmt.Println("Bienvenu dans Hangman, Veuillez choisir votre difficultée:")
+	fmt.Println("Bienvenu dans Hangman, veuillez choisir votre difficultée:")
 	fmt.Println("1 : Facile ")
 	fmt.Println("2 : Intermédiaire ")
 	fmt.Println("3 : Difficile ")
@@ -78,10 +79,9 @@ func Menu() {
 		fmt.Printf("Bien jouer, vous avez deviner le mot : %s", Word)
 		return
 	} else if Graph > 9 {
-		fmt.Printf("Vous avez perdu, le mot a deviner était : %s", Word)
+		fmt.Printf("Vous avez perdu, le mot à deviner était : %s", Word)
 		return
 	} else {
-		fmt.Print(Word)
 		Display()
 		WordOrLetter()
 		Menu()
@@ -90,8 +90,8 @@ func Menu() {
 }
 
 func Display() {
-	fmt.Print("Voici le mot a deviner :")
-	for _, i := range Tableau {
+	fmt.Print("Voici le mot à deviner :")
+	for _, i := range TabUnder {
 		fmt.Print(i, " ")
 	}
 	fmt.Println("")
@@ -106,14 +106,18 @@ func WordOrLetter() {
 	fmt.Scan()
 	switch Input {
 	case "1":
-		fmt.Println("Entrez le mot a deviner :")
+		fmt.Println("Entrez un mot :")
 		fmt.Scan(&Input)
+		if IsInGuessed(Input, Guessed) {
+			fmt.Println("Vous avez déjà essayé ce mot")
+			return
+		}
 		IsTheWord(Input)
 	case "2":
 		fmt.Println("Entrez une lettre :")
 		fmt.Scan(&Input)
 		if IsInGuessed(Input, Guessed) {
-			fmt.Println("Vous avez déjà essayer cette lettre")
+			fmt.Println("Vous avez déjà essayé cette lettre")
 			return
 		}
 		IsInWord(Input)
@@ -128,26 +132,40 @@ func IsTheWord(w string) {
 	if w == Word {
 		win = true
 		return
+	} else {
+		Guessed = append(Guessed, w)
 	}
 	win = false
 	Graph += 2
 	DisplayHangman()
 }
 
-func IsInGuessed(x string, Tab []string) bool {
+func IsInGuessed(g string, Tab []string) bool {
 	for _, i := range Tab {
-		if i == x {
+		if i == g {
 			return true
 		}
 	}
 	return false
 }
 
-func IsInWord(y string) {
-	Guessed = append(Guessed, y)
+func IsComplete() {
+	for _, i := range TabUnder {
+		if i == "_" {
+			win = false
+			return
+		}
+
+	}
+	win = true
+}
+
+func IsInWord(l string) {
+	Guessed = append(Guessed, l)
 	for _, i := range Word {
-		if string(i) == y {
-			ChangeTableau(y)
+		if string(i) == l {
+			ChangeTableau(l)
+			IsComplete()
 			return
 		}
 	}
@@ -156,11 +174,25 @@ func IsInWord(y string) {
 	DisplayHangman()
 }
 
-func ChangeTableau(y string) {
+func ChangeTableau(c string) {
 	for id, i := range Word {
-		if string(i) == y {
-			Tableau[id] = y
+		if string(i) == c {
+			TabUnder[id] = c
 		}
+	}
+}
+func RandomLetter() {
+	if len(Word) > 5 {
+		id := rand.Intn(len(Word))
+		ChangeTableau(string(Word[id]))
+		Guessed = append(Guessed, string(Word[id]))
+	}
+
+	if len(Word) > 7 {
+		ind := rand.Intn(len(Word))
+		ChangeTableau(string(Word[ind]))
+		Guessed = append(Guessed, string(Word[ind]))
+
 	}
 }
 
@@ -181,7 +213,7 @@ func DisplayHangman() {
 		Graph = 1
 	}
 
-	file, err := os.Open("hangman.txt")
+	file, err := os.Open("GraphHangman/hangman.txt")
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	}
