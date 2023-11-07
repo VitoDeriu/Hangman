@@ -14,6 +14,7 @@ var win bool          //verif si on a win (si y'a plus d'underscore)
 var Guessed []string  //liste des lettres déjà rentrer
 var Graph int         //compteur de point pour le graph
 
+// fonction d'ouveture du dossier et choix d'un mot random par rapport au fichier choisi, tolower le mot, passage en underscore
 func ShowTextFromFile(path string) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -34,6 +35,7 @@ func ShowTextFromFile(path string) {
 	RandomLetter()
 }
 
+// passage du mot en underscore
 func Underscore(Word string) {
 	for _, i := range Word {
 		if i == '-' {
@@ -44,6 +46,7 @@ func Underscore(Word string) {
 	}
 }
 
+// menu selection de difficulté
 func SelectLevel() string {
 	var Input string
 	fmt.Println("Bienvenu dans Hangman, veuillez choisir votre difficultée:")
@@ -65,6 +68,7 @@ func SelectLevel() string {
 	return ""
 }
 
+// fonction de menu qui lance le jeu et qui check la win
 func Menu() {
 	if win {
 		DisplayHangman()
@@ -80,6 +84,7 @@ func Menu() {
 	}
 }
 
+// affichage du mot
 func Display() {
 	fmt.Print("Voici le mot à deviner :")
 	for _, i := range TabUnder {
@@ -88,6 +93,7 @@ func Display() {
 	fmt.Println("")
 }
 
+// menu de selection pour mot ou lettre
 func WordOrLetter() {
 	var Input string
 	fmt.Println("1 : Entrez le mot entier")
@@ -118,6 +124,7 @@ func WordOrLetter() {
 	}
 }
 
+// check mot entier
 func IsTheWord(w string) {
 	if w == Word {
 		win = true
@@ -130,6 +137,7 @@ func IsTheWord(w string) {
 	DisplayHangman()
 }
 
+// check is déjà utilisé
 func IsInGuessed(g string, Tab []string) bool {
 	for _, i := range Tab {
 		if i == g {
@@ -139,6 +147,7 @@ func IsInGuessed(g string, Tab []string) bool {
 	return false
 }
 
+// fonction de win
 func IsComplete() {
 	for _, i := range TabUnder {
 		if i == "_" {
@@ -149,6 +158,7 @@ func IsComplete() {
 	win = true
 }
 
+// check lettre dans le mot
 func IsInWord(l string) {
 	Guessed = append(Guessed, l)
 	for _, i := range Word {
@@ -163,6 +173,7 @@ func IsInWord(l string) {
 	DisplayHangman()
 }
 
+// remplacement du underscore par la lettre
 func ChangeTableau(c string) {
 	for id, i := range Word {
 		if string(i) == c {
@@ -170,6 +181,8 @@ func ChangeTableau(c string) {
 		}
 	}
 }
+
+// choix d'une lettre random dans le mot, 2 lettre si mot plus long
 func RandomLetter() {
 	if len(Word) > 5 {
 		id := rand.Intn(len(Word))
@@ -183,6 +196,7 @@ func RandomLetter() {
 	}
 }
 
+// to lower quoi..
 func ToLower(s string) string {
 	var n string
 	for _, c := range s {
@@ -195,6 +209,7 @@ func ToLower(s string) string {
 	return n
 }
 
+// affichage du pendu
 func DisplayHangman() {
 	if Graph == 0 {
 		Graph = 1
