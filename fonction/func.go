@@ -15,19 +15,16 @@ var Guessed []string  //liste des lettres déjà rentrer
 var Graph int         //compteur de point pour le graph
 
 func ShowTextFromFile(path string) {
-
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
-
 	sc := bufio.NewScanner(file)
 	lines := make([]string, 0)
 	for sc.Scan() {
 		lines = append(lines, sc.Text())
 	}
-
 	if err := sc.Err(); err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +35,6 @@ func ShowTextFromFile(path string) {
 }
 
 func Underscore(Word string) {
-
 	for _, i := range Word {
 		if i == '-' {
 			TabUnder = append(TabUnder, ("-"))
@@ -50,15 +46,12 @@ func Underscore(Word string) {
 
 func SelectLevel() string {
 	var Input string
-
 	fmt.Println("Bienvenu dans Hangman, veuillez choisir votre difficultée:")
 	fmt.Println("1 : Facile ")
 	fmt.Println("2 : Intermédiaire ")
 	fmt.Println("3 : Difficile ")
 	fmt.Println("4 : Horror ")
-
 	fmt.Scanln(&Input)
-
 	switch Input {
 	case "1":
 		return "dico_folder/dico_facile.txt"
@@ -73,7 +66,6 @@ func SelectLevel() string {
 }
 
 func Menu() {
-
 	if win {
 		DisplayHangman()
 		fmt.Printf("Bien jouer, vous avez deviner le mot : %s", Word)
@@ -86,7 +78,6 @@ func Menu() {
 		WordOrLetter()
 		Menu()
 	}
-
 }
 
 func Display() {
@@ -101,7 +92,6 @@ func WordOrLetter() {
 	var Input string
 	fmt.Println("1 : Entrez le mot entier")
 	fmt.Println("2 : Entrez une seule lettre")
-
 	fmt.Scan(&Input)
 	fmt.Scan()
 	switch Input {
@@ -155,7 +145,6 @@ func IsComplete() {
 			win = false
 			return
 		}
-
 	}
 	win = true
 }
@@ -187,12 +176,10 @@ func RandomLetter() {
 		ChangeTableau(string(Word[id]))
 		Guessed = append(Guessed, string(Word[id]))
 	}
-
 	if len(Word) > 7 {
 		ind := rand.Intn(len(Word))
 		ChangeTableau(string(Word[ind]))
 		Guessed = append(Guessed, string(Word[ind]))
-
 	}
 }
 
@@ -212,7 +199,6 @@ func DisplayHangman() {
 	if Graph == 0 {
 		Graph = 1
 	}
-
 	file, err := os.Open("GraphHangman/hangman.txt")
 	if err != nil {
 		log.Fatalf("Error: %s", err)
